@@ -11,7 +11,7 @@
 - **6轮分维度深度搜索**：靶点机制、安全性、疗效、同机制竞品、同适应症竞品、商业策略逐轮聚焦
 - **高质量搜索**：Tavily 提供带引用的搜索结果，自动过滤低质量来源
 - **结构化分析框架**：基于三大支柱（靶点机制、临床数据、竞品格局）的系统化评估
-- **多格式输出**：JSON、Markdown、PDF 三种格式报告
+- **多格式输出**：JSON、Markdown 两种格式报告
 - **当前模型生成报告**：无需额外 API 调用，由运行中的模型直接分析生成
 
 ## 架构设计
@@ -31,7 +31,6 @@ Oncology-Pipeline-Tavily/
 │   ├── report/
 │   │   ├── base.py               # 报告基类
 │   │   ├── markdown_report.py    # Markdown 报告生成
-│   │   ├── pdf_report.py         # PDF 报告生成
 │   │   └── factory.py            # 报告工厂
 │   └── utils/
 │       ├── logger.py             # 日志工具
@@ -51,7 +50,6 @@ pip install -r requirements.txt
 依赖包：
 - `tavily-python` - Tavily Search API 客户端
 - `python-dotenv` - 环境变量管理
-- `fpdf2` - PDF 生成（可选）
 
 ### 2. 配置 API 密钥
 
@@ -120,19 +118,17 @@ python tavily_research.py "ORIC-944" --output custom_report.json
 
 ## 输出文件
 
-每次研究生成三个文件：
+每次研究生成两个文件：
 
 ```
 research_{drug_name}_{timestamp}.json      # 原始数据
 research_{drug_name}_{timestamp}.md        # Markdown 报告
-research_{drug_name}_{timestamp}.pdf       # PDF 报告
 ```
 
 示例：
 ```
 research_Enhertu_1709568234.json
 research_Enhertu_1709568234.md
-research_Enhertu_1709568234.pdf
 ```
 
 ## 使用流程
@@ -150,7 +146,7 @@ python tavily_research.py "Enhertu"
 
 ### 报告回写
 
-模型生成报告后，使用 Write 工具将完整报告写入 MD 文件，然后调用 `save_report_from_file()` 生成带来源的 MD 和 PDF：
+模型生成报告后，使用 Write 工具将完整报告写入 MD 文件，然后调用 `save_report_from_file()` 生成带来源的 MD：
 
 ```python
 import sys
@@ -206,7 +202,6 @@ print(files)
 
 - Python: 3.8+
 - tavily-python: 最新版本
-- fpdf2: 2.7.0+ (可选)
 
 ## 许可证
 
@@ -215,7 +210,7 @@ print(files)
 ## 更新日志
 
 ### v1.3 (2026-03-15)
-- 两阶段流程：搜索保存 JSON，模型生成报告后回写 MD/PDF
+- 两阶段流程：搜索保存 JSON，模型生成报告后回写 MD
 - save_report() 支持报告内容回写
 
 ### v1.2 (2026-03-15)
